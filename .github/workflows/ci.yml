@@ -11,7 +11,7 @@ concurrency:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -19,9 +19,21 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Check syntax
-        run: npm run check
-      - name: Run tests
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Formatting
+        run: npm run format:check
+      - name: Unit tests
         run: npm test
-      - name: Verify repository hygiene
+      - name: Production build
+        run: npm run build
+      - name: Repository hygiene
         run: npm run verify:repo
+      - name: Dependency audit
+        run: npm audit --audit-level=moderate

@@ -21,7 +21,7 @@ This repository starts with a minimal dependency-free JavaScript demo. The long-
 
 ## Why staged migration?
 
-The existing demo has no third-party runtime or development dependencies. Keeping the current JavaScript working while adding lightweight gates avoids landing a large, unverified toolchain migration. Introduce package lockfiles and dependency scanning for npm packages as soon as npm dependencies are added.
+The initial demo had no dependencies. The TypeScript/React/Vite migration introduces a committed npm lockfile and reproducible CI via npm ci.
 
 ## Security boundaries
 
@@ -29,7 +29,7 @@ All current financial figures are fictional. Never include bank credentials, car
 
 ## Next steps
 
-1. Move the demo to Vite + React + strict TypeScript in a self-contained PR with lockfile and reproducible `npm ci`.
-2. Add ESLint, Prettier, Vitest, and automated formatting and type checks. Enable GitHub Dependency graph in repository security settings, then add PR dependency review.
+1. Migrate the demo to Vite + React + strict TypeScript (completed in next PR).
+2. ESLint, Prettier, Vitest and formatting/type checking (completed in next PR). Enable GitHub Dependency graph in repository security settings, then add PR dependency review.
 3. Define API/domain schemas before provisioning AWS.
 4. Add Playwright smoke tests once the UI is stable.
