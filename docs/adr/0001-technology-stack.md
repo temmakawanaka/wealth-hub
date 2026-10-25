@@ -1,35 +1,43 @@
 # ADR 0001: TypeScript-first application architecture
 
-- Status: Accepted (incremental adoption)
+- Status: Accepted; frontend and development tooling adopted, backend deferred
 - Date: 2026-10-25
 
 ## Context
 
-This repository starts with a minimal dependency-free JavaScript demo. The long-term goal is a personal finance dashboard that aggregates financial data safely. It is not yet connected to any financial accounts.
+The project is a synthetic-data-only personal finance prototype. Development foundations, correctness and security come before new screens. No financial accounts or production cloud resources are connected.
 
-## Decision
+## Adopted
 
-- **Primary language:** TypeScript for frontend, backend, and shared domain types.
-- **Frontend:** React + Vite when the demo is migrated.
-- **Backend (later):** TypeScript-based AWS Lambda behind API Gateway. Enforce user authorization on every request.
-- **Auth (later):** Amazon Cognito, Authorization Code Flow with PKCE. No long-lived AWS credentials in the browser.
-- **Data (later):** DynamoDB, with isolation by authenticated user.
-- **Tests (later):** Vitest for unit/integration and Playwright for browser E2E.
-- **Style (later):** ESLint, Prettier, and TypeScript strict mode, introduced alongside the first TS migration PR.
-- **CI now:** Node 22 built-in test runner, syntax checks, hygiene verification, CodeQL, Dependabot for GitHub Actions, and a dependency-review plan pending GitHub Dependency graph enablement.
-- **Infrastructure / deployment:** Deferred. Do not introduce paid cloud infrastructure or secrets at this stage.
+- Application language: strict TypeScript.
+- Frontend: React + Vite.
+- Application unit tests: Vitest, scoped to `src`.
+- Development-tool tests: Node.js built-in test runner, scoped to `scripts/tooling.test.mjs`.
+- Style and static checks: ESLint + Prettier.
+- Supported development environment: Node.js 22.x, at least 22.12.0, and npm 10.x. `.nvmrc` selects the Node line; `verify:env` enforces the policy. Package engines describe the dependency minimum, not support for every subsequent major.
+- Dependencies: committed npm lockfile and `npm ci`; no dependency changes are needed for the tooling scripts.
+- CI: the same `npm run check` command on Linux and Windows, with a fail-closed `quality` aggregation job.
+- Security checks: CodeQL, npm audit, filename/line-ending hygiene checks, and Dependabot update proposals. These do not guarantee the absence of secrets or vulnerabilities.
 
-## Why staged migration?
+## Deferred
 
-The initial demo had no dependencies. The TypeScript/React/Vite migration introduces a committed npm lockfile and reproducible CI via npm ci.
+- Secret content scanning: #14.
+- Dependency Review and Actions pinning: #15.
+- Coverage gate: #16.
+- Development/build CSP separation and browser E2E: #17 and #18.
+- Server-enforced branch protection and required status checks: #19; workflow changes do not configure repository settings.
+- Domain/schema design: #20.
+- Cognito Authorization Code + PKCE, API authorization and threat model: #21.
+- TypeScript API contract and in-memory backend: #22.
+- Import and provider-integration research: #23.
+- AWS infrastructure and deployment planning: #24, deliberately deferred.
+
+The planned backend remains API Gateway + Lambda + DynamoDB with authorization on every operation. Do not distribute long-lived AWS credentials to the browser. Financial integration needs a provider-specific API, terms, authentication and cost review before implementation.
 
 ## Security boundaries
 
-All current financial figures are fictional. Never include bank credentials, card details, account identifiers, customer data, access tokens or real balances in source control. Frontend validation is not authorization. Later integrations require a provider-by-provider API and terms review, a threat model, and tests for cross-user data access.
+All financial examples are synthetic. Never commit credentials, account identifiers, statements or real balances. Validate external input at runtime as well as at the TypeScript boundary. User ownership must come from verified authentication, not an untrusted request body. Production rollout requires authorization tests, logging/redaction, encryption and recovery design.
 
-## Next steps
+## Verification and maintenance
 
-1. Migrate the demo to Vite + React + strict TypeScript (completed in next PR).
-2. ESLint, Prettier, Vitest and formatting/type checking (completed in next PR). Enable GitHub Dependency graph in repository security settings, then add PR dependency review.
-3. Define API/domain schemas before provisioning AWS.
-4. Add Playwright smoke tests once the UI is stable.
+See [CONTRIBUTING.md](../../CONTRIBUTING.md) for the shared local/CI commands. Keep the runtime, type definitions, version files, CI and documentation aligned when upgrading Node. Review Dependabot proposals rather than merging major changes automatically. Check every latest-head CI result before merging, including the separate CodeQL workflow.

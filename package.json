@@ -7,6 +7,8 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "preinstall": "node scripts/verify-environment.mjs",
+    "predev": "npm run verify:env",
     "dev": "vite --host 127.0.0.1",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview --host 127.0.0.1",
@@ -14,9 +16,12 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "test": "vitest run",
+    "test": "vitest run src",
+    "test:tooling": "node --test scripts/tooling.test.mjs",
+    "verify:env": "node scripts/verify-environment.mjs",
     "verify:repo": "node scripts/verify-repo.mjs",
-    "check": "npm run typecheck && npm run lint && npm run format:check && npm run test && npm run verify:repo"
+    "audit:deps": "npm audit --audit-level=moderate",
+    "check": "npm run verify:env && npm run typecheck && npm run lint && npm run format:check && npm test && npm run test:tooling && npm run build && npm run verify:repo && npm run audit:deps"
   },
   "dependencies": {
     "react": "^19.2.0",
