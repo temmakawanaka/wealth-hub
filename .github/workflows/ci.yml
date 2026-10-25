@@ -1,13 +1,17 @@
 name: CI
 on:
   push:
+    branches: [main]
   pull_request:
 permissions:
   contents: read
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
-  test:
+  quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -15,5 +19,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: npm run check
-      - run: npm test
+      - name: Check syntax
+        run: npm run check
+      - name: Run tests
+        run: npm test
+      - name: Verify repository hygiene
+        run: npm run verify:repo
