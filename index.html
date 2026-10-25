@@ -1,29 +1,17 @@
 <!doctype html>
 <html lang="ja">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="referrer" content="no-referrer">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
-  <title>wealth-hub | 家計・資産管理</title>
-  <link rel="stylesheet" href="./styles.css">
-  <script type="module" src="./app.mjs"></script>
-</head>
-<body>
-  <header class="header"><div class="brand"><span class="mark">W</span><span>wealth-hub</span></div><span class="demo">DEMO · 架空データ</span></header>
-  <main>
-    <div class="intro"><div><p class="eyebrow">PERSONAL FINANCE</p><h1>家計と資産を、ひとつの画面に。</h1><p class="muted">銀行・カード・資産情報を一元管理するためのプロトタイプ</p></div><span class="tag">外部サービス未接続</span></div>
-    <section aria-label="サマリー" class="cards">
-      <article class="card"><h2>総残高（デモ）</h2><p class="figure" id="balance"></p><p class="hint">すべての登録口座の合計</p></article>
-      <article class="card"><h2>今月の収入（デモ）</h2><p class="figure" id="income"></p><p class="hint">入金取引の合計</p></article>
-      <article class="card"><h2>今月の支出（デモ）</h2><p class="figure" id="expenses"></p><p class="hint">出金取引の合計</p></article>
-      <article class="card"><h2>今月の収支（デモ）</h2><p class="figure" id="net"></p><p class="hint">収入 − 支出</p></article>
-    </section>
-    <div class="columns">
-      <section class="panel"><div class="panel-head"><h2>口座一覧</h2><span>サンプル</span></div><ul id="accounts" class="account-list"></ul></section>
-      <section class="panel"><div class="panel-head"><h2>最近の取引</h2><span>サンプル</span></div><ul id="transactions" class="transaction-list"></ul></section>
-    </div>
-    <p class="notice">🔒 この画面はデモ専用です。個人情報の入力・保存・外部送信は行いません。実データ連携は認証・認可APIを実装してから有効にします。</p>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' ws:; object-src 'none'; base-uri 'none'; form-action 'none'"
+    />
+    <title>wealth-hub | 家計・資産管理</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
