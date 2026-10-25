@@ -13,7 +13,10 @@ export function App() {
   return (
     <>
       <header className="header">
-        <div className="brand"><span className="mark">W</span><span>wealth-hub</span></div>
+        <div className="brand">
+          <span className="mark">W</span>
+          <span>wealth-hub</span>
+        </div>
         <span className="demo">DEMO · 架空データ</span>
       </header>
       <main>
@@ -36,24 +39,37 @@ export function App() {
         </section>
         <div className="columns">
           <section className="panel">
-            <div className="panel-head"><h2>口座一覧</h2><span>サンプル</span></div>
+            <div className="panel-head">
+              <h2>口座一覧</h2>
+              <span>サンプル</span>
+            </div>
             <ul className="account-list">
               {accounts.map((account) => (
                 <li className="list-row" key={account.id}>
-                  <div><strong>{account.name}</strong><small>{account.kind}</small></div>
+                  <div>
+                    <strong>{account.name}</strong>
+                    <small>{account.kind}</small>
+                  </div>
                   <b>{yen(account.balance)}</b>
                 </li>
               ))}
             </ul>
           </section>
           <section className="panel">
-            <div className="panel-head"><h2>最近の取引</h2><span>サンプル</span></div>
+            <div className="panel-head">
+              <h2>最近の取引</h2>
+              <span>サンプル</span>
+            </div>
             <ul className="transaction-list">
               {transactions.map((tx) => (
                 <li className="list-row" key={tx.id}>
-                  <div><strong>{tx.name}</strong><small>{tx.date}</small></div>
+                  <div>
+                    <strong>{tx.name}</strong>
+                    <small>{tx.date}</small>
+                  </div>
                   <b className={tx.amount < 0 ? 'negative' : 'positive'}>
-                    {tx.amount > 0 ? '+' : ''}{yen(tx.amount)}
+                    {tx.amount > 0 ? '+' : ''}
+                    {yen(tx.amount)}
                   </b>
                 </li>
               ))}

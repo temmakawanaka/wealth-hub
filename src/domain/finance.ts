@@ -21,7 +21,10 @@ export function requireAmount(amount: number): number {
   if (!Number.isSafeInteger(amount)) throw new TypeError('Amount must be a safe integer (JPY)');
   return amount;
 }
-export function summarize(accounts: readonly Account[], transactions: readonly Transaction[]): Summary {
+export function summarize(
+  accounts: readonly Account[],
+  transactions: readonly Transaction[],
+): Summary {
   const balance = accounts.reduce((sum, account) => sum + requireAmount(account.balance), 0);
   const income = transactions
     .filter((tx) => tx.amount > 0)
@@ -29,7 +32,12 @@ export function summarize(accounts: readonly Account[], transactions: readonly T
   const expenses = transactions
     .filter((tx) => tx.amount < 0)
     .reduce((sum, tx) => sum - requireAmount(tx.amount), 0);
-  return { balance: requireAmount(balance), income: requireAmount(income), expenses: requireAmount(expenses), net: requireAmount(income - expenses) };
+  return {
+    balance: requireAmount(balance),
+    income: requireAmount(income),
+    expenses: requireAmount(expenses),
+    net: requireAmount(income - expenses),
+  };
 }
 export function yen(amount: number): string {
   return new Intl.NumberFormat('ja-JP', {
