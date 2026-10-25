@@ -16,7 +16,7 @@ This repository starts with a minimal dependency-free JavaScript demo. The long-
 - **Data (later):** DynamoDB, with isolation by authenticated user.
 - **Tests (later):** Vitest for unit/integration and Playwright for browser E2E.
 - **Style (later):** ESLint, Prettier, and TypeScript strict mode, introduced alongside the first TS migration PR.
-- **CI now:** Node 22 built-in test runner, syntax checks, hygiene verification, CodeQL, dependency review, and Dependabot for GitHub Actions.
+- **CI now:** Node 22 built-in test runner, syntax checks, hygiene verification, CodeQL, Dependabot for GitHub Actions, and a dependency-review plan pending GitHub Dependency graph enablement.
 - **Infrastructure / deployment:** Deferred. Do not introduce paid cloud infrastructure or secrets at this stage.
 
 ## Why staged migration?
@@ -30,6 +30,6 @@ All current financial figures are fictional. Never include bank credentials, car
 ## Next steps
 
 1. Move the demo to Vite + React + strict TypeScript in a self-contained PR with lockfile and reproducible `npm ci`.
-2. Add ESLint, Prettier, Vitest, and automated formatting and type checks.
+2. Add ESLint, Prettier, Vitest, and automated formatting and type checks. Enable GitHub Dependency graph in repository security settings, then add PR dependency review.
 3. Define API/domain schemas before provisioning AWS.
 4. Add Playwright smoke tests once the UI is stable.
