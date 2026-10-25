@@ -3,9 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22 <23"
+  },
   "scripts": {
     "dev": "node server.mjs",
     "test": "node --test",
-    "check": "node --check app.mjs && node --check finance.mjs && node --check server.mjs"
+    "check": "node --check app.mjs && node --check finance.mjs && node --check server.mjs && node --check scripts/verify-repo.mjs",
+    "verify:repo": "node scripts/verify-repo.mjs",
+    "validate": "npm run check && npm test && npm run verify:repo"
   }
 }
