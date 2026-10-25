@@ -16,28 +16,32 @@ export interface Summary {
   expenses: number;
   net: number;
 }
-/** Whole-yen values only. Do not use floating-point fractions for money. */
+/** Whole-yen values only; reject invalid input without coercion or rounding. */
 export function requireAmount(amount: number): number {
   if (!Number.isSafeInteger(amount)) throw new TypeError('Amount must be a safe integer (JPY)');
-  return amount;
+  return amount === 0 ? 0 : amount;
 }
+/**
+ * Validate before classification, including zero and NaN.
+ * Reject an unsafe intermediate sum even if later amounts would cancel it.
+ * Negative balances are allowed; income/expenses are nonnegative magnitudes.
+ */
 export function summarize(
   accounts: readonly Account[],
   transactions: readonly Transaction[],
 ): Summary {
-  const balance = accounts.reduce((sum, account) => sum + requireAmount(account.balance), 0);
-  const income = transactions
-    .filter((tx) => tx.amount > 0)
-    .reduce((sum, tx) => sum + requireAmount(tx.amount), 0);
-  const expenses = transactions
-    .filter((tx) => tx.amount < 0)
-    .reduce((sum, tx) => sum - requireAmount(tx.amount), 0);
-  return {
-    balance: requireAmount(balance),
-    income: requireAmount(income),
-    expenses: requireAmount(expenses),
-    net: requireAmount(income - expenses),
-  };
+  let balance = 0;
+  let income = 0;
+  let expenses = 0;
+  for (const account of accounts) {
+    balance = requireAmount(balance + requireAmount(account.balance));
+  }
+  for (const transaction of transactions) {
+    const amount = requireAmount(transaction.amount);
+    if (amount > 0) income = requireAmount(income + amount);
+    else if (amount < 0) expenses = requireAmount(expenses - amount);
+  }
+  return { balance, income, expenses, net: requireAmount(income - expenses) };
 }
 export function yen(amount: number): string {
   return new Intl.NumberFormat('ja-JP', {
